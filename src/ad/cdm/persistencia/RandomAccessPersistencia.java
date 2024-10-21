@@ -141,12 +141,14 @@ public class RandomAccessPersistencia implements IPersistencia {
         ArrayList<Persona> personas = new ArrayList<>();
 
         try {
-            personas = leerTodo(ruta);
+            personas = leerTodo(ruta);       
+      
 
         } catch (IOException ex) {
             Logger.getLogger(RandomAccessPersistencia.class.getName()).log(Level.SEVERE, "Error al leer persona");
         }
-        return p;
+        return p = personas.get(posicion);
+    
     }
 
 }
