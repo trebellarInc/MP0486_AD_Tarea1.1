@@ -58,9 +58,21 @@ public class CrearPersonaRandomAccess {
         //TODO
 
         IPersistencia dao = new RandomAccessPersistencia();
-        dao.escribirPersonas(personas, Tarea11Sol.PERSONAS_ORIGEN_PATH_RAN.toString());
+        
+        if (Files.exists(Tarea11Sol.PERSONAS_ORIGEN_PATH_RAN))
+        {
+            try {
+                // Si existe el fichero lo borra
+                Files.delete(Tarea11Sol.PERSONAS_ORIGEN_PATH_RAN);
+            } catch (IOException ex) {
+                Logger.getLogger(CrearPersonaRandomAccess.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        
+        dao.escribirPersonas(personas, Tarea11Sol.PERSONAS_ORIGEN_PATH_RAN.toString());        
 
         try {
+        
             personasRecuperadas = dao.leerTodo(Tarea11Sol.PERSONAS_ORIGEN_PATH_RAN.toString());
             int contador = 1;
             for (Persona p : personasRecuperadas) {

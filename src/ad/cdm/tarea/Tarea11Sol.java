@@ -57,9 +57,15 @@ public class Tarea11Sol {
 
             try {
 
-                //TODO Enter data using BufferReader
-                
-                
+             //TODO Enter data using BufferReader
+                BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+                System.out.println("Introduce un número entero:");
+
+                // Leer la entrada del usuario como una cadena
+                String entrada = br.readLine();
+
+                // Convertir la cadena a un número entero
+                posicion = Integer.parseInt(entrada);
                 
                 
                 
@@ -72,9 +78,6 @@ public class Tarea11Sol {
             } catch (NumberFormatException ex) {
                 System.out.println("Inténteo de novo");
                 logger.log(Level.SEVERE, "Ocorreu unha excepción convertendo: " + numeroString, ex);
-            } catch (IOException ex) {
-                logger.log(Level.SEVERE, "Ocorreu unha excepción", ex);
-                throw ex;
             }
         } while (!valida);
 

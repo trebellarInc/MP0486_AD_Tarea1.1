@@ -30,16 +30,13 @@ public class RandomAccessPersistencia implements IPersistencia {
         long longitudBytes = 0;
 
         if (personas != null) {
-            //System.out.println(personas.toString());
-            
-            try (RandomAccessFile raf = new RandomAccessFile(ruta, "rw")) {
 
-             
+            try (RandomAccessFile raf = new RandomAccessFile(ruta, "rw")) {
                 longitudBytes = raf.length();
                 raf.seek(longitudBytes);
 
                 for (Persona persona : personas) {
-
+                    // 8+18+200+4+4+1=235 bytes por persona
                     // Id -> Long: 8 bytes
                     raf.writeLong(persona.getId());
 
@@ -61,18 +58,11 @@ public class RandomAccessPersistencia implements IPersistencia {
 
                     // Borrado -> Boolean: 1 byte
                     raf.writeBoolean(persona.isBorrado());
-
-                    System.out.println(persona.toString());
-
-                    System.out.println("Escribiendo una persona -> " + persona.toString());
-
                 }
-
             } catch (Exception ex) {
                 logger.log(Level.SEVERE, "Se ha producido una excepción: ", ex);
             }
         }
-
     }
 
     /**
@@ -88,39 +78,38 @@ public class RandomAccessPersistencia implements IPersistencia {
     public ArrayList<Persona> leerTodo(String ruta) throws IOException {
 
         ArrayList<Persona> personas = new ArrayList<>();
-
         try (RandomAccessFile raf = new RandomAccessFile(ruta, "r")) {
+            while (raf.getFilePointer() < raf.length()) {
+                Persona p = new Persona();
 
-            Persona p = new Persona();
+                // Lee el Id
+                p.setId(raf.readLong());
+                // Lee el DNI
+                String dni = "";
+                for (int i = 0; i < Persona.MAX_LENGTH_DNI; i++) {
+                    dni += raf.readChar();
+                }
+                p.setDni(dni);
+                // Lee el nombre 
+                String nombre = "";
+                for (int i = 0; i < Persona.MAX_LENGTH_NOMBRE; i++) {
+                    nombre += raf.readChar();
+                }
+                p.setNombre(nombre);
+                // Lee la edad
+                p.setEdad(raf.readInt());
+                // Lee el salario
+                p.setSalario(raf.readFloat());
+                // Lee si ha sido borrado
+                p.setBorrado(raf.readBoolean());
 
-            p.setId(raf.readLong());
-
-            String dni = "";
-            for (int i = 0; i < Persona.MAX_LENGTH_DNI; i++) {
-                dni += raf.readChar();
+                personas.add(p);
             }
-            p.setDni(dni);
-
-            String nombre = "";
-            for (int i = 0; i < Persona.MAX_LENGTH_NOMBRE; i++) {
-                nombre += raf.readChar();
-            }
-            p.setNombre(nombre);
-
-            p.setEdad(raf.readInt());
-
-            p.setSalario(raf.readFloat());
-
-            p.setBorrado(raf.readBoolean());
-
-            personas.add(p);
-
         } catch (IOException e) {
+    
             System.out.println(e.getMessage());
         }
-
         return personas;
-
     }
 
     /**
