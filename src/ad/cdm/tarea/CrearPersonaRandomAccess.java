@@ -54,13 +54,11 @@ public class CrearPersonaRandomAccess {
 
         ArrayList<Persona> personas = crearPersonas();
         ArrayList<Persona> personasRecuperadas = new ArrayList<>();
-        
-        //TODO
 
+        //TODO
         IPersistencia dao = new RandomAccessPersistencia();
-        
-        if (Files.exists(Tarea11Sol.PERSONAS_ORIGEN_PATH_RAN))
-        {
+
+        if (Files.exists(Tarea11Sol.PERSONAS_ORIGEN_PATH_RAN)) {
             try {
                 // Si existe el fichero lo borra
                 Files.delete(Tarea11Sol.PERSONAS_ORIGEN_PATH_RAN);
@@ -68,11 +66,9 @@ public class CrearPersonaRandomAccess {
                 Logger.getLogger(CrearPersonaRandomAccess.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        
-        dao.escribirPersonas(personas, Tarea11Sol.PERSONAS_ORIGEN_PATH_RAN.toString());        
-
+        dao.escribirPersonas(personas, Tarea11Sol.PERSONAS_ORIGEN_PATH_RAN.toString());
         try {
-        
+
             personasRecuperadas = dao.leerTodo(Tarea11Sol.PERSONAS_ORIGEN_PATH_RAN.toString());
             int contador = 1;
             for (Persona p : personasRecuperadas) {
@@ -82,7 +78,5 @@ public class CrearPersonaRandomAccess {
         } catch (IOException ex) {
             logger.log(Level.SEVERE, "Ocorreu unha excepción", ex);
         }
-
     }
-
 }
